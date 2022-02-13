@@ -28,7 +28,7 @@ package com.jcraft.jorbis;
 
 class Residue1 extends Residue0 {
 
-    int inverse(Block vb, Object vl, float[][] in, int[] nonzero, int ch) {
+    void inverse(Block vb, Object vl, float[][] in, int[] nonzero, int ch) {
         int used = 0;
         for (int i = 0; i < ch; i++) {
             if (nonzero[i] != 0) {
@@ -36,9 +36,8 @@ class Residue1 extends Residue0 {
             }
         }
         if (used != 0) {
-            return (_01inverse(vb, vl, in, used, 1));
+            _01inverse(vb, vl, in, used, 1);
         } else {
-            return 0;
         }
     }
 }

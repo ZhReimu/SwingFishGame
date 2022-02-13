@@ -29,7 +29,7 @@ package com.jcraft.jorbis;
 import com.jcraft.jogg.Buffer;
 
 abstract class FuncMapping {
-    public static FuncMapping[] mapping_P = {new Mapping0()};
+    public static final FuncMapping[] mapping_P = {new Mapping0()};
 
     abstract void pack(Info info, Object imap, Buffer buffer);
 

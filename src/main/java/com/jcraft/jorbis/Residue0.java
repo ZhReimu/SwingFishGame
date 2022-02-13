@@ -155,8 +155,8 @@ class Residue0 extends FuncResidue {
     private static int[][][] _01inverse_partword = new int[2][][]; // _01inverse is synchronized for
 
     // re-using partword
-    synchronized static int _01inverse(Block vb, Object vl, float[][] in, int ch,
-                                       int decodepart) {
+    synchronized static void _01inverse(Block vb, Object vl, float[][] in, int ch,
+                                        int decodepart) {
         int i, j, k, l, s;
         LookResidue0 look = (LookResidue0) vl;
         InfoResidue0 info = look.info;
@@ -188,11 +188,11 @@ class Residue0 extends FuncResidue {
                     for (j = 0; j < ch; j++) {
                         int temp = look.phrasebook.decode(vb.opb);
                         if (temp == -1) {
-                            return (0);
+                            return;
                         }
                         _01inverse_partword[j][l] = look.decodemap[temp];
                         if (_01inverse_partword[j][l] == null) {
-                            return (0);
+                            return;
                         }
                     }
                 }
@@ -208,12 +208,12 @@ class Residue0 extends FuncResidue {
                                 if (decodepart == 0) {
                                     if (stagebook.decodevs_add(in[j], offset, vb.opb,
                                             samples_per_partition) == -1) {
-                                        return (0);
+                                        return;
                                     }
                                 } else if (decodepart == 1) {
                                     if (stagebook.decodev_add(in[j], offset, vb.opb,
                                             samples_per_partition) == -1) {
-                                        return (0);
+                                        return;
                                     }
                                 }
                             }
@@ -221,7 +221,6 @@ class Residue0 extends FuncResidue {
                     }
             }
         }
-        return (0);
     }
 
     static int[][] _2inverse_partword = null;
@@ -275,20 +274,19 @@ class Residue0 extends FuncResidue {
         return (0);
     }
 
-    int inverse(Block vb, Object vl, float[][] in, int[] nonzero, int ch) {
+    void inverse(Block vb, Object vl, float[][] in, int[] nonzero, int ch) {
         int used = 0;
         for (int i = 0; i < ch; i++) {
             if (nonzero[i] != 0) {
                 in[used++] = in[i];
             }
         }
-        if (used != 0)
-            return (_01inverse(vb, vl, in, used, 0));
-        else
-            return (0);
+        if (used != 0) {
+            _01inverse(vb, vl, in, used, 0);
+        }
     }
 
-    class LookResidue0 {
+    static class LookResidue0 {
         InfoResidue0 info;
         int map;
 
@@ -306,7 +304,7 @@ class Residue0 extends FuncResidue {
         int frames;
     }
 
-    class InfoResidue0 {
+    static class InfoResidue0 {
         // block-partitioned VQ coded straight residue
         int begin;
         int end;
@@ -315,8 +313,8 @@ class Residue0 extends FuncResidue {
         int grouping; // group n vectors per partition
         int partitions; // possible codebooks for a partition
         int groupbook; // huffbook for partitioning
-        int[] secondstages = new int[64]; // expanded out to pointers in lookup
-        int[] booklist = new int[256]; // list of second stage books
+        final int[] secondstages = new int[64]; // expanded out to pointers in lookup
+        final int[] booklist = new int[256]; // list of second stage books
 
         // encode-only heuristic settings
         float[] entmax = new float[64]; // book entropy threshholds

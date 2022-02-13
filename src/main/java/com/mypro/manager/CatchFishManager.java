@@ -66,7 +66,7 @@ public class CatchFishManager extends IManager {
             if (!fish.isAlive()) {
                 continue;
             }
-            if (CircleRectangleIntersect.isIntersect(netX, netY, fish.getHeadFish().getFish_X() - fish.getDistanceHeadFishX() + fish.getPicWidth() / 2, fish.getHeadFish().getFish_Y() - fish.getDistanceHeadFishY() + fish.getPicHeight() / 2, fish.getPicHeight(), fish.getPicWidth(), ammo.getNet().getPicWidth() / 2)) {
+            if (CircleRectangleIntersect.isIntersect(netX, netY, fish.getHeadFish().getFish_X() - fish.getDistanceHeadFishX() + fish.getPicWidth() / 2F, fish.getHeadFish().getFish_Y() - fish.getDistanceHeadFishY() + fish.getPicHeight() / 2F, fish.getPicHeight(), fish.getPicWidth(), ammo.getNet().getPicWidth() / 2F)) {
                 if (checkCatch(ammo, fish)) {
                     //调用鱼已经被捕捉成功的方法
                     fish.onCaught(ammo, netX, netY);

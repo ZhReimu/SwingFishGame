@@ -28,6 +28,8 @@ package com.jcraft.jorbis;
 
 import com.jcraft.jogg.Buffer;
 
+import java.util.Arrays;
+
 class Floor1 extends FuncFloor {
     static final int floor1_rangedb = 140;
     static final int VIF_POSIT = 63;
@@ -172,9 +174,7 @@ class Floor1 extends FuncFloor {
         }
 
         /* points from sort order back to range number */
-        for (int j = 0; j < _n; j++) {
-            look.forward_index[j] = sortpointer[j];
-        }
+        if (_n >= 0) System.arraycopy(sortpointer, 0, look.forward_index, 0, _n);
         /* points from range order to sorted position */
         for (int j = 0; j < _n; j++) {
             look.reverse_index[look.forward_index[j]] = j;
@@ -255,8 +255,7 @@ class Floor1 extends FuncFloor {
             if (fit_value == null || fit_value.length < look.posts) {
                 fit_value = new int[look.posts];
             } else {
-                for (int i = 0; i < fit_value.length; i++)
-                    fit_value[i] = 0;
+                Arrays.fill(fit_value, 0);
             }
 
             fit_value[0] = vb.opb.read(Util.ilog(look.quant_q - 1));
@@ -300,14 +299,13 @@ class Floor1 extends FuncFloor {
                         fit_value[look.loneighbor[i - 2]], fit_value[look.hineighbor[i - 2]],
                         info.postlist[i]);
                 int hiroom = look.quant_q - predicted;
-                int loroom = predicted;
-                int room = (hiroom < loroom ? hiroom : loroom) << 1;
+                int room = (Math.min(hiroom, predicted)) << 1;
                 int val = fit_value[i];
 
                 if (val != 0) {
                     if (val >= room) {
-                        if (hiroom > loroom) {
-                            val = val - loroom;
+                        if (hiroom > predicted) {
+                            val = val - predicted;
                         } else {
                             val = -1 - (val - hiroom);
                         }
@@ -342,14 +340,14 @@ class Floor1 extends FuncFloor {
             int ady = Math.abs(dy);
             int err = ady * (x - x0);
 
-            int off = (int) (err / adx);
+            int off = err / adx;
             if (dy < 0)
                 return (y0 - off);
             return (y0 + off);
         }
     }
 
-    int inverse2(Block vb, Object i, Object memo, float[] out) {
+    void inverse2(Block vb, Object i, Object memo, float[] out) {
         LookFloor1 look = (LookFloor1) i;
         InfoFloor1 info = look.vi;
         int n = vb.vd.vi.blocksizes[vb.mode] / 2;
@@ -376,15 +374,14 @@ class Floor1 extends FuncFloor {
             for (int j = hx; j < n; j++) {
                 out[j] *= out[j - 1]; /* be certain */
             }
-            return (1);
+            return;
         }
         for (int j = 0; j < n; j++) {
             out[j] = 0.f;
         }
-        return (0);
     }
 
-    private static float[] FLOOR_fromdB_LOOKUP = {1.0649863e-07F, 1.1341951e-07F,
+    private static final float[] FLOOR_fromdB_LOOKUP = {1.0649863e-07F, 1.1341951e-07F,
             1.2079015e-07F, 1.2863978e-07F, 1.3699951e-07F, 1.4590251e-07F,
             1.5538408e-07F, 1.6548181e-07F, 1.7623575e-07F, 1.8768855e-07F,
             1.9988561e-07F, 2.128753e-07F, 2.2670913e-07F, 2.4144197e-07F,
@@ -471,7 +468,7 @@ class Floor1 extends FuncFloor {
         }
     }
 
-    class InfoFloor1 {
+    static class InfoFloor1 {
         static final int VIF_POSIT = 63;
         static final int VIF_CLASS = 16;
         static final int VIF_PARTS = 31;
@@ -552,7 +549,7 @@ class Floor1 extends FuncFloor {
 
     }
 
-    class LookFloor1 {
+    static class LookFloor1 {
         static final int VIF_POSIT = 63;
 
         int[] sorted_index = new int[VIF_POSIT + 2];
@@ -579,7 +576,7 @@ class Floor1 extends FuncFloor {
         }
     }
 
-    class Lsfit_acc {
+    static class Lsfit_acc {
         long x0;
         long x1;
 
@@ -595,7 +592,7 @@ class Floor1 extends FuncFloor {
         long edgey1;
     }
 
-    class EchstateFloor1 {
+    static class EchstateFloor1 {
         int[] codewords;
         float[] curve;
         long frameno;

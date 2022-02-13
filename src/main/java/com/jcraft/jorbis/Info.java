@@ -33,7 +33,7 @@ public class Info {
     private static final int OV_EBADPACKET = -136;
     private static final int OV_ENOTAUDIO = -135;
 
-    private static byte[] _vorbis = "vorbis".getBytes();
+    private static final byte[] _vorbis = "vorbis".getBytes();
     private static final int VI_TIMEB = 1;
     //  private static final int VI_FLOORB=1;
     private static final int VI_FLOORB = 2;
@@ -67,7 +67,7 @@ public class Info {
     // Vorbis supports only short and long blocks, but allows the
     // encoder to choose the sizes
 
-    int[] blocksizes = new int[2];
+    final int[] blocksizes = new int[2];
 
     // modes are the primary means of supporting on-the-fly different
     // blocksizes, different channel mappings (LR or mid-side),
@@ -98,7 +98,7 @@ public class Info {
 
     StaticCodeBook[] book_param = null;
 
-    PsyInfo[] psy_param = new PsyInfo[64]; // encode only
+    final PsyInfo[] psy_param = new PsyInfo[64]; // encode only
 
     // for block long/sort tuning; encode only
     int envelopesa;

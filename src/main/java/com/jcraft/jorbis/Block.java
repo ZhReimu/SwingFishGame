@@ -32,7 +32,7 @@ import com.jcraft.jogg.Packet;
 public class Block {
     ///necessary stream state for linking to the framing abstraction
     float[][] pcm = new float[0][]; // this is a pointer into local storage
-    Buffer opb = new Buffer();
+    final Buffer opb = new Buffer();
 
     int lW;
     int W;
@@ -62,13 +62,12 @@ public class Block {
         this.vd = vd;
     }
 
-    public int clear() {
+    public void clear() {
         if (vd != null) {
             if (vd.analysisp != 0) {
                 opb.writeclear();
             }
         }
-        return (0);
     }
 
     public int synthesis(Packet op) {

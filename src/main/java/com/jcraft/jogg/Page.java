@@ -27,7 +27,7 @@
 package com.jcraft.jogg;
 
 public class Page {
-    private static int[] crc_lookup = new int[256];
+    private static final int[] crc_lookup = new int[256];
 
     static {
         for (int i = 0; i < crc_lookup.length; i++) {
@@ -47,7 +47,7 @@ public class Page {
                 r <<= 1;
             }
         }
-        return (r & 0xffffffff);
+        return (r);
     }
 
     public byte[] header_base;

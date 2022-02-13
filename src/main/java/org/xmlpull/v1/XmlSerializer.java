@@ -99,7 +99,7 @@ public interface XmlSerializer {
      * <p><b>WARNING</b> no information about encoding is available!
      */
     void setOutput(Writer writer)
-            throws IOException, IllegalArgumentException, IllegalStateException;
+            throws IllegalArgumentException, IllegalStateException;
 
     /**
      * Write &lt;&#63;xml declaration with encoding (if encoding not null)
@@ -206,7 +206,7 @@ public interface XmlSerializer {
      * or throw IllegalStateException if default namespace is already bound
      * to non-empty string.
      */
-    XmlSerializer startTag(String namespace, String name)
+    void startTag(String namespace, String name)
             throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
@@ -216,7 +216,7 @@ public interface XmlSerializer {
      * If namespace is null or empty string
      * no namespace prefix is printed but just name.
      */
-    XmlSerializer attribute(String namespace, String name, String value)
+    void attribute(String namespace, String name, String value)
             throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
@@ -227,7 +227,7 @@ public interface XmlSerializer {
      * If namespace is empty string then serialzier will make sure that
      * default empty namespace is declared (in XML 1.0 xmlns='').
      */
-    XmlSerializer endTag(String namespace, String name)
+    void endTag(String namespace, String name)
             throws IOException, IllegalArgumentException, IllegalStateException;
 
 
@@ -287,7 +287,7 @@ public interface XmlSerializer {
     /**
      * Writes text, where special XML chars are escaped automatically
      */
-    XmlSerializer text(String text)
+    void text(String text)
             throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**

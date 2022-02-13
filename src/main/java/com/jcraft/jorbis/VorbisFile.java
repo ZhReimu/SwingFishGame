@@ -62,7 +62,7 @@ public class VorbisFile {
     long offset;
     long end;
 
-    SyncState oy = new SyncState();
+    final SyncState oy = new SyncState();
 
     int links;
     long[] offsets;
@@ -82,11 +82,11 @@ public class VorbisFile {
     float bittrack;
     float samptrack;
 
-    StreamState os = new StreamState(); // take physical pages, weld into a logical
+    final StreamState os = new StreamState(); // take physical pages, weld into a logical
     // stream of packets
-    DspState vd = new DspState(); // central working state for
+    final DspState vd = new DspState(); // central working state for
     // the packet->PCM decoder
-    Block vb = new Block(vd); // local working space for packet->PCM decode
+    final Block vb = new Block(vd); // local working space for packet->PCM decode
 
     //ov_callbacks callbacks;
 
@@ -100,7 +100,7 @@ public class VorbisFile {
                 throw new JOrbisException("VorbisFile: open return -1");
             }
         } catch (Exception e) {
-            throw new JOrbisException("VorbisFile: " + e.toString());
+            throw new JOrbisException("VorbisFile: " + e);
         } finally {
             if (is != null) {
                 try {
@@ -123,7 +123,7 @@ public class VorbisFile {
     private int get_data() {
         int index = oy.buffer(CHUNKSIZE);
         byte[] buffer = oy.data;
-        int bytes = 0;
+        int bytes;
         try {
             bytes = datasource.read(buffer, index, CHUNKSIZE);
         } catch (Exception e) {
@@ -364,13 +364,12 @@ public class VorbisFile {
         }
     }
 
-    private int make_decode_ready() {
+    private void make_decode_ready() {
         if (decode_ready)
             System.exit(1);
         vd.synthesis_init(vi[0]);
         vb.init(vd);
         decode_ready = true;
-        return (0);
     }
 
     int open_seekable() throws JOrbisException {
@@ -395,7 +394,6 @@ public class VorbisFile {
         seekable = true;
         fseek(datasource, 0, SEEK_END);
         offset = ftell(datasource);
-        end = offset;
         // We get the offset for the last page of the physical bitstream.
         // Most OggVorbis files will contain a single logical bitstream
         end = get_prev_page(og);
@@ -566,13 +564,12 @@ public class VorbisFile {
                 } else {
                     // we're streaming
                     // fetch the three header packets, build the info struct
-                    int foo[] = new int[1];
+                    int[] foo = new int[1];
                     int ret = fetch_headers(vi[0], vc[0], foo, og);
                     current_serialno = foo[0];
                     if (ret != 0)
                         return ret;
                     current_link++;
-                    i = 0;
                 }
                 make_decode_ready();
             }
@@ -582,7 +579,7 @@ public class VorbisFile {
 
     // The helpers are over; it's all toplevel interface from here on out
     // clear out the OggVorbis_File struct
-    int clear() {
+    void clear() {
         vb.clear();
         vd.clear();
         os.clear();
@@ -605,10 +602,9 @@ public class VorbisFile {
             offsets = null;
         oy.clear();
 
-        return (0);
     }
 
-    static int fseek(InputStream fis, long off, int whence) {
+    static void fseek(InputStream fis, long off, int whence) {
         if (fis instanceof SeekableInputStream) {
             SeekableInputStream sis = (SeekableInputStream) fis;
             try {
@@ -616,21 +612,18 @@ public class VorbisFile {
                     sis.seek(off);
                 } else if (whence == SEEK_END) {
                     sis.seek(sis.getLength() - off);
-                } else {
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
-            return 0;
+            return;
         }
         try {
             if (whence == 0) {
                 fis.reset();
             }
             fis.skip(off);
-        } catch (Exception e) {
-            return -1;
+        } catch (Exception ignored) {
         }
-        return 0;
     }
 
     static long ftell(InputStream fis) {
@@ -639,7 +632,7 @@ public class VorbisFile {
                 SeekableInputStream sis = (SeekableInputStream) fis;
                 return (sis.tell());
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return 0;
     }
@@ -889,7 +882,7 @@ public class VorbisFile {
     // returns zero on success, nonzero on failure
 
     public int pcm_seek(long pos) {
-        int link = -1;
+        int link;
         long total = pcm_total(-1);
 
         if (!seekable)
@@ -1000,7 +993,7 @@ public class VorbisFile {
     int time_seek(float seconds) {
         // translate time to PCM position and call pcm_seek
 
-        int link = -1;
+        int link;
         long pcm_total = pcm_total(-1);
         float time_total = time_total(-1);
 
@@ -1066,7 +1059,7 @@ public class VorbisFile {
             }
         }
 
-        return ((float) time_total + (float) (pcm_offset - pcm_total) / vi[link].rate);
+        return (time_total + (float) (pcm_offset - pcm_total) / vi[link].rate);
     }
 
     //  link:   -1) return the vorbis_info struct for the bitstream section
@@ -1297,8 +1290,8 @@ public class VorbisFile {
         datasource.close();
     }
 
-    class SeekableInputStream extends InputStream {
-        java.io.RandomAccessFile raf = null;
+    static class SeekableInputStream extends InputStream {
+        java.io.RandomAccessFile raf;
         final String mode = "r";
 
         SeekableInputStream(String file) throws java.io.IOException {
@@ -1318,7 +1311,7 @@ public class VorbisFile {
         }
 
         public long skip(long n) throws java.io.IOException {
-            return (long) (raf.skipBytes((int) n));
+            return raf.skipBytes((int) n);
         }
 
         public long getLength() throws java.io.IOException {
@@ -1340,7 +1333,7 @@ public class VorbisFile {
         public synchronized void mark(int m) {
         }
 
-        public synchronized void reset() throws java.io.IOException {
+        public synchronized void reset() {
         }
 
         public boolean markSupported() {

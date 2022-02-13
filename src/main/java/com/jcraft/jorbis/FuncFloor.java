@@ -30,7 +30,7 @@ import com.jcraft.jogg.Buffer;
 
 abstract class FuncFloor {
 
-    public static FuncFloor[] floor_P = {new Floor0(), new Floor1()};
+    public static final FuncFloor[] floor_P = {new Floor0(), new Floor1()};
 
     abstract void pack(Object i, Buffer opb);
 
@@ -48,5 +48,5 @@ abstract class FuncFloor {
 
     abstract Object inverse1(Block vb, Object i, Object memo);
 
-    abstract int inverse2(Block vb, Object i, Object memo, float[] out);
+    abstract void inverse2(Block vb, Object i, Object memo, float[] out);
 }

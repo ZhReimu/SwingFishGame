@@ -16,9 +16,9 @@ public abstract class EffectAdapter extends DrawableAdapter {
 
     //粒子彩色图
     protected Bitmap[] effectImages = null;
-    protected ArrayList<Particle> effects = new ArrayList<>();
-    protected ArrayList<Particle> news = new ArrayList<>();
-    protected ArrayList<Particle> removes = new ArrayList<>();
+    protected final ArrayList<Particle> effects = new ArrayList<>();
+    protected final ArrayList<Particle> news = new ArrayList<>();
+    protected final ArrayList<Particle> removes = new ArrayList<>();
     protected boolean isPlay = false;//是否播放粒子效果
 
     //粒子图

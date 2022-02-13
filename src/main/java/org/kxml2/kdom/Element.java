@@ -25,6 +25,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -37,9 +38,9 @@ public class Element extends Node {
 
     protected String namespace;
     protected String name;
-    protected Vector attributes;
+    protected Vector<String[]> attributes;
     protected Node parent;
-    protected Vector prefixes;
+    protected Vector<String[]> prefixes;
 
     public Element() {
     }
@@ -154,7 +155,7 @@ public class Element extends Node {
     public String getNamespaceUri(String prefix) {
         int cnt = getNamespaceCount();
         for (int i = 0; i < cnt; i++) {
-            if (prefix == getNamespacePrefix(i) ||
+            if (Objects.equals(prefix, getNamespacePrefix(i)) ||
                     (prefix != null && prefix.equals(getNamespacePrefix(i))))
                 return getNamespaceUri(i);
         }
@@ -251,13 +252,13 @@ public class Element extends Node {
 
     public void setAttribute(String namespace, String name, String value) {
         if (attributes == null)
-            attributes = new Vector();
+            attributes = new Vector<>();
 
         if (namespace == null)
             namespace = "";
 
         for (int i = attributes.size() - 1; i >= 0; i--) {
-            String[] attribut = (String[]) attributes.elementAt(i);
+            String[] attribut = attributes.elementAt(i);
             if (attribut[0].equals(namespace) &&
                     attribut[1].equals(name)) {
 
@@ -281,7 +282,7 @@ public class Element extends Node {
      */
 
     public void setPrefix(String prefix, String namespace) {
-        if (prefixes == null) prefixes = new Vector();
+        if (prefixes == null) prefixes = new Vector<>();
         prefixes.addElement(new String[]{prefix, namespace});
     }
 

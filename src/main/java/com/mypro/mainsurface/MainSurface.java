@@ -258,11 +258,8 @@ public class MainSurface extends JPanel {
                     }
                     qualityHints.put(RenderingHints.KEY_RENDERING,
                             RenderingHints.VALUE_RENDER_QUALITY);
-
                     qualityHints.put(RenderingHints.KEY_INTERPOLATION,
                             RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                    qualityHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION,
-                            RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
                     qualityHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION,
                             RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
                 }

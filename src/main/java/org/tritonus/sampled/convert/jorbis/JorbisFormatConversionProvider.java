@@ -343,8 +343,6 @@ public class JorbisFormatConversionProvider
 
         /**
          * Read the vorbis identification header.
-         *
-         * @throw IOException
          */
         private void readIdentificationHeader()
                 throws IOException {
@@ -383,7 +381,7 @@ public class JorbisFormatConversionProvider
          */
         private void processComments() {
             byte[][] ptr = m_vorbisComment.user_comments;
-            String currComment = "";
+            String currComment;
             m_songComments.clear();
             for (byte[] bytes : ptr) {
                 if (bytes == null) {
@@ -564,7 +562,7 @@ public class JorbisFormatConversionProvider
                 // we need more data from the stream
                 int nIndex = m_oggSyncState.buffer(BUFFER_SIZE);
                 // TODO: call stream.read() directly
-                int nBytes = readFromStream(m_oggSyncState.data, nIndex, BUFFER_SIZE);
+                int nBytes = readFromStream(m_oggSyncState.data, nIndex);
                 // TODO: This clause should become obsolete; readFromStream() should
                 // propagate exceptions directly.
                 if (nBytes == -1) {
@@ -579,18 +577,17 @@ public class JorbisFormatConversionProvider
          * Read raw data from to ogg bitstream.
          * Reads from
          *
-         * @param buffer  the where the read data should be put into. Its length has to be at least nStart + nLength.
+         * @param buffer the where the read data should be put into. Its length has to be at least nStart + nLength.
          * @param nStart
-         * @param nLength the number of bytes to read
          * @return the number of bytes read (maybe 0) or
          * -1 if there is no more data in the stream.
          * @see #m_oggBitStream
          * @see #m_oggBitStream
          * a specified number of bytes into a buffer, starting at a specified buffer index.
          */
-        private int readFromStream(byte[] buffer, int nStart, int nLength)
+        private int readFromStream(byte[] buffer, int nStart)
                 throws IOException {
-            return m_oggBitStream.read(buffer, nStart, nLength);
+            return m_oggBitStream.read(buffer, nStart, DecodedJorbisAudioInputStream.BUFFER_SIZE);
         }
 
 

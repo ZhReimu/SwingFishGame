@@ -14,7 +14,7 @@ public class PicActThread extends Thread {
     private boolean notPause = true;            //是否需要暂停动作
     private boolean isAct = true;                //需要动作
     int len;                                    //获取鱼的所有动作
-    private volatile boolean isPause = false;            //线程是否已经暂停
+    private volatile boolean isPause;            //线程是否已经暂停
 
     public PicActThread(Fish fish) {
         this.fish = fish;

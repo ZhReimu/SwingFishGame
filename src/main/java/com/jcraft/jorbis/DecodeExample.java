@@ -37,7 +37,7 @@ import com.jcraft.jogg.SyncState;
 
 class DecodeExample {
     static int convsize = 4096 * 2;
-    static byte[] convbuffer = new byte[convsize]; // take 8k out of the data segment, not the stack
+    static final byte[] convbuffer = new byte[convsize]; // take 8k out of the data segment, not the stack
 
     public static void main(String[] arg) {
         java.io.InputStream input = System.in;
@@ -45,7 +45,7 @@ class DecodeExample {
             try {
                 input = new java.io.FileInputStream(arg[0]);
             } catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
 
@@ -80,7 +80,7 @@ class DecodeExample {
             try {
                 bytes = input.read(buffer, index, 4096);
             } catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace();
                 System.exit(-1);
             }
             oy.wrote(bytes);
@@ -174,7 +174,7 @@ class DecodeExample {
                 try {
                     bytes = input.read(buffer, index, 4096);
                 } catch (Exception e) {
-                    System.err.println(e);
+                    e.printStackTrace();
                     System.exit(1);
                 }
                 if (bytes == 0 && i < 2) {
@@ -188,10 +188,10 @@ class DecodeExample {
             // decoding
             {
                 byte[][] ptr = vc.user_comments;
-                for (int j = 0; j < ptr.length; j++) {
-                    if (ptr[j] == null)
+                for (byte[] value : ptr) {
+                    if (value == null)
                         break;
-                    System.err.println(new String(ptr[j], 0, ptr[j].length - 1));
+                    System.err.println(new String(value, 0, value.length - 1));
                 }
                 System.err.println("\nBitstream is " + vi.channels + " channel, " + vi.rate
                         + "Hz");
@@ -246,7 +246,7 @@ class DecodeExample {
 
                                 while ((samples = vd.synthesis_pcmout(_pcm, _index)) > 0) {
                                     float[][] pcm = _pcm[0];
-                                    int bout = (samples < convsize ? samples : convsize);
+                                    int bout = (Math.min(samples, convsize));
 
                                     // convert floats to 16 bit signed ints (host order) and
                                     // interleave
@@ -292,7 +292,7 @@ class DecodeExample {
                     try {
                         bytes = input.read(buffer, index, 4096);
                     } catch (Exception e) {
-                        System.err.println(e);
+                        e.printStackTrace();
                         System.exit(1);
                     }
                     oy.wrote(bytes);

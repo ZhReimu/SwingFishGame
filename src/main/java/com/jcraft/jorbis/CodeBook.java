@@ -60,17 +60,13 @@ class CodeBook {
     // returns entry number and *modifies a* to the quantization value
     int errorv(float[] a) {
         int best = best(a, 1);
-        for (int k = 0; k < dim; k++) {
-            a[k] = valuelist[best * dim + k];
-        }
+        if (dim >= 0) System.arraycopy(valuelist, best * dim, a, 0, dim);
         return (best);
     }
 
     // returns the number of bits and *modifies a* to the quantization value
     int encodev(int best, float[] a, Buffer b) {
-        for (int k = 0; k < dim; k++) {
-            a[k] = valuelist[best * dim + k];
-        }
+        if (dim >= 0) System.arraycopy(valuelist, best * dim, a, 0, dim);
         return (encode(best, b));
     }
 
@@ -235,21 +231,21 @@ class CodeBook {
     }
 
     // returns the entry number or -1 on eof
-    int decodevs(float[] a, int index, Buffer b, int step, int addmul) {
+    int decodevs(float[] a, int index, Buffer b) {
         int entry = decode(b);
         if (entry == -1)
             return (-1);
-        switch (addmul) {
+        switch (-1) {
             case -1:
-                for (int i = 0, o = 0; i < dim; i++, o += step)
+                for (int i = 0, o = 0; i < dim; i++, o += 1)
                     a[index + o] = valuelist[entry * dim + i];
                 break;
             case 0:
-                for (int i = 0, o = 0; i < dim; i++, o += step)
+                for (int i = 0, o = 0; i < dim; i++, o += 1)
                     a[index + o] += valuelist[entry * dim + i];
                 break;
             case 1:
-                for (int i = 0, o = 0; i < dim; i++, o += step)
+                for (int i = 0, o = 0; i < dim; i++, o += 1)
                     a[index + o] *= valuelist[entry * dim + i];
                 break;
             default:
@@ -312,7 +308,7 @@ class CodeBook {
         return (acc);
     }
 
-    int init_decode(StaticCodeBook s) {
+    void init_decode(StaticCodeBook s) {
         c = s;
         entries = s.entries;
         dim = s.dim;
@@ -321,9 +317,7 @@ class CodeBook {
         decode_tree = make_decode_tree();
         if (decode_tree == null) {
             clear();
-            return (-1);
         }
-        return (0);
     }
 
     // given a list of word lengths, generate a list of codewords.  Works
@@ -445,7 +439,7 @@ class CodeBook {
         t.tabl = new int[n];
         for (int i = 0; i < n; i++) {
             int p = 0;
-            int j = 0;
+            int j;
             for (j = 0; j < t.tabn && (p > 0 || j == 0); j++) {
                 if ((i & (1 << j)) != 0) {
                     p = ptr1[p];
@@ -460,7 +454,7 @@ class CodeBook {
         return (t);
     }
 
-    class DecodeAux {
+    static class DecodeAux {
         int[] tab;
         int[] tabl;
         int tabn;

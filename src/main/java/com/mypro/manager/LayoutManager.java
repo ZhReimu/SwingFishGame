@@ -54,7 +54,7 @@ public class LayoutManager extends IManager {
                 for (int i = 5; i >= 1; i--) {
                     scale = i * 0.2f;
                     pos = (5 - i) * 0.2f;
-                    cannon.getPicMatrix().setTranslate(cannon.getX() + cannon.getPicWidth() / 2F * pos, cannon.getY() + cannon.getPicHeight() / 2 * pos);
+                    cannon.getPicMatrix().setTranslate(cannon.getX() + cannon.getPicWidth() / 2F * pos, cannon.getY() + cannon.getPicHeight() / 2F * pos);
                     cannon.getPicMatrix().preScale(scale, scale);
                     Thread.sleep(60);
                 }
@@ -64,7 +64,7 @@ public class LayoutManager extends IManager {
                 for (int i = 1; i <= 5; i++) {
                     scale = i * 0.2f;
                     pos = (5 - i) * 0.2f;
-                    cannon.getPicMatrix().setTranslate(cannon.getX() + cannon.getPicWidth() / 2F * pos, cannon.getY() + cannon.getPicHeight() / 2 * pos);
+                    cannon.getPicMatrix().setTranslate(cannon.getX() + cannon.getPicWidth() / 2F * pos, cannon.getY() + cannon.getPicHeight() / 2F * pos);
                     cannon.getPicMatrix().preScale(scale, scale);
                     Thread.sleep(60);
                 }

@@ -47,7 +47,7 @@ public class KXmlSerializer implements XmlSerializer {
     private boolean unicode;
     private String encoding;
 
-    private final void check(boolean close) throws IOException {
+    private void check(boolean close) throws IOException {
         if (!pending)
             return;
 
@@ -88,7 +88,7 @@ public class KXmlSerializer implements XmlSerializer {
         writer.write(close ? " />" : ">");
     }
 
-    private final void writeEscaped(String s, int quot)
+    private void writeEscaped(String s, int quot)
             throws IOException {
 
         for (int i = 0; i < s.length(); i++) {
@@ -162,12 +162,9 @@ public class KXmlSerializer implements XmlSerializer {
 
     public boolean getFeature(String name) {
         //return false;
-        return (
-                "http://xmlpull.org/v1/doc/features.html#indent-output"
-                        .equals(
-                                name))
-                ? indent[depth]
-                : false;
+        return "http://xmlpull.org/v1/doc/features.html#indent-output"
+                .equals(
+                        name) && indent[depth];
     }
 
     public String getPrefix(String namespace, boolean create) {
@@ -178,7 +175,7 @@ public class KXmlSerializer implements XmlSerializer {
         }
     }
 
-    private final String getPrefix(
+    private String getPrefix(
             String namespace,
             boolean includeDefault,
             boolean create)
@@ -338,13 +335,13 @@ public class KXmlSerializer implements XmlSerializer {
         if (standalone != null) {
             writer.write("standalone='");
             writer.write(
-                    standalone.booleanValue() ? "yes" : "no");
+                    standalone ? "yes" : "no");
             writer.write("' ");
         }
         writer.write("?>");
     }
 
-    public XmlSerializer startTag(String namespace, String name)
+    public void startTag(String namespace, String name)
             throws IOException {
         check(false);
 
@@ -394,10 +391,9 @@ public class KXmlSerializer implements XmlSerializer {
 
         pending = true;
 
-        return this;
     }
 
-    public XmlSerializer attribute(
+    public void attribute(
             String namespace,
             String name,
             String value)
@@ -446,7 +442,6 @@ public class KXmlSerializer implements XmlSerializer {
         writeEscaped(value, q);
         writer.write(q);
 
-        return this;
     }
 
     public void flush() throws IOException {
@@ -460,7 +455,7 @@ public class KXmlSerializer implements XmlSerializer {
     		writer.close();
     	}
     */
-    public XmlSerializer endTag(String namespace, String name)
+    public void endTag(String namespace, String name)
             throws IOException {
 
         if (!pending)
@@ -496,7 +491,6 @@ public class KXmlSerializer implements XmlSerializer {
         }
 
         nspCounts[depth + 1] = nspCounts[depth];
-        return this;
     }
 
     public String getNamespace() {
@@ -511,11 +505,10 @@ public class KXmlSerializer implements XmlSerializer {
         return pending ? depth + 1 : depth;
     }
 
-    public XmlSerializer text(String text) throws IOException {
+    public void text(String text) throws IOException {
         check(false);
         indent[depth] = false;
         writeEscaped(text, -1);
-        return this;
     }
 
     public XmlSerializer text(char[] text, int start, int len)

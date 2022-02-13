@@ -28,7 +28,7 @@ package com.jcraft.jorbis;
 
 class Lpc {
     // en/decode lookups
-    Drft fft = new Drft();
+    final Drft fft = new Drft();
 
     int ln;
     int m;

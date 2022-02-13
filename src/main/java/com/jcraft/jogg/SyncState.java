@@ -53,9 +53,8 @@ public class SyncState {
     int headerbytes;
     int bodybytes;
 
-    public int clear() {
+    public void clear() {
         data = null;
-        return (0);
     }
 
     public int buffer(int size) {
@@ -84,11 +83,10 @@ public class SyncState {
         return (fill);
     }
 
-    public int wrote(int bytes) {
+    public void wrote(int bytes) {
         if (fill + bytes > storage)
-            return (-1);
+            return;
         fill += bytes;
-        return (0);
     }
 
     // sync the stream.  This is meant to be useful for finding page
@@ -98,8 +96,8 @@ public class SyncState {
     // -n) skipped n bytes
     //  0) page not ready; more data (no bytes skipped)
     //  n) page synced at current location; page length n bytes
-    private Page pageseek = new Page();
-    private byte[] chksum = new byte[4];
+    private final Page pageseek = new Page();
+    private final byte[] chksum = new byte[4];
 
     public int pageseek(Page og) {
         int page = returned;
@@ -252,13 +250,12 @@ public class SyncState {
     }
 
     // clear things to an initial state.  Good to call, eg, before seeking
-    public int reset() {
+    public void reset() {
         fill = 0;
         returned = 0;
         unsynced = 0;
         headerbytes = 0;
         bodybytes = 0;
-        return (0);
     }
 
     public void init() {

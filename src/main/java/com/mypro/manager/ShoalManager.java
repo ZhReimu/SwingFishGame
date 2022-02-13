@@ -12,6 +12,8 @@ import com.mypro.threads.PicActThread;
 import com.mypro.tools.LogTools;
 import com.mypro.tools.ThreadTool;
 
+import java.util.Arrays;
+
 /**
  * 鱼群管理器
  *
@@ -87,7 +89,7 @@ public class ShoalManager {
             }
         }
         if (fish == null) {
-            Log.w(this.getClass().getName(), "领头鱼类型为空！fish=null!!原因:概率值:" + probability + "出现鱼概率集合:" + showProbability);
+            Log.w(this.getClass().getName(), "领头鱼类型为空！fish=null!!原因:概率值:" + probability + "出现鱼概率集合:" + Arrays.toString(showProbability));
             for (int p : showProbability) {
                 Log.w(this.getClass().getName(), "出现鱼概率集合:" + p);
             }
@@ -171,8 +173,8 @@ public class ShoalManager {
                     if (GamingInfo.getGamingInfo().isGaming()) {
                         while (GamingInfo.getGamingInfo().isPause() && sumAtOut > 1) {
                             fishFlag = headFish.getShoal().get(shoalIndex);
-                            randomMinY = (float) (fromY - fishFlag.getPicHeight());
-                            randomMaxY = (float) (fromY + fishFlag.getPicHeight());
+                            randomMinY = fromY - fishFlag.getPicHeight();
+                            randomMaxY = fromY + fishFlag.getPicHeight();
                             if (headFish.getCurrentFromPoint() <= Constant.FROM_BOTTOM_LEFT) {
                                 flagFishX = -headFish.getFish().getPicWidth();
 

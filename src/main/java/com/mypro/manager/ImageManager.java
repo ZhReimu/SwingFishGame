@@ -156,7 +156,7 @@ public class ImageManager extends IManager {
      */
     private void getCutImageInfo(XmlPullParser xml,
                                  ImageConfig config) {
-        String imageName = null;
+        String imageName;
         while (GamingInfo.getGamingInfo().isGaming() && XmlManager.gotoTagByTagName(xml, "key")) {
             imageName = XmlManager.getValueByCurrentTag(xml);
             if (XmlManager.gotoTagByTagName(xml, "dict")) {
@@ -236,7 +236,6 @@ public class ImageManager extends IManager {
             }
             imgs[i] = getImage(configs[i], src, proportion);
         }
-        src = null;
         System.gc();
         return imgs;
     }
@@ -269,7 +268,7 @@ public class ImageManager extends IManager {
      */
     public Bitmap rotateImage(int angle, Bitmap newImage) {
         AffineTransform trans = new AffineTransform();
-        trans.rotate(Math.toRadians(angle), newImage.getWidth() / 2, newImage.getHeight() / 2);
+        trans.rotate(Math.toRadians(angle), newImage.getWidth() / 2F, newImage.getHeight() / 2F);
         BufferedImage img = new BufferedImage(newImage.getWidth(), newImage.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = (Graphics2D) img.getGraphics();
         RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
@@ -361,11 +360,7 @@ public class ImageManager extends IManager {
      * 从资产中获取根据屏幕尺寸缩放后的图片
      */
     public Bitmap getscaleImageByScreenFromAssets(String imageName) throws Exception {
-        try {
-            return scaleImageByScreen(getBitmapByAssets(imageName));
-        } catch (IOException e) {
-            throw e;
-        }
+        return scaleImageByScreen(getBitmapByAssets(imageName));
     }
 
 }

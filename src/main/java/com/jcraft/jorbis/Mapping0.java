@@ -34,8 +34,6 @@ class Mapping0 extends FuncMapping {
     void free_info(Object imap) {
     }
 
-    ;
-
     void free_look(Object imap) {
     }
 
@@ -321,7 +319,7 @@ class Mapping0 extends FuncMapping {
         return (0);
     }
 
-    class InfoMapping0 {
+    static class InfoMapping0 {
         int submaps; // <= 16
         int[] chmuxlist = new int[256]; // up to 256 channels in a Vorbis stream
 
@@ -346,7 +344,7 @@ class Mapping0 extends FuncMapping {
         }
     }
 
-    class LookMapping0 {
+    static class LookMapping0 {
         InfoMode mode;
         InfoMapping0 map;
         Object[] time_look;

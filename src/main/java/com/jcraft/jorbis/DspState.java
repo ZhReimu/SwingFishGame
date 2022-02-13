@@ -60,8 +60,8 @@ public class DspState {
     long res_bits;
 
     // local lookup storage
-    float[][][][][] window; // block, leadin, leadout, type
-    Object[][] transform;
+    final float[][][][][] window; // block, leadin, leadout, type
+    final Object[][] transform;
     CodeBook[] fullbooks;
     // backend lookups are tied to the mode, not the backend or naked mapping
     Object[] mode;
@@ -95,39 +95,33 @@ public class DspState {
 
     static float[] window(int type, int window, int left, int right) {
         float[] ret = new float[window];
-        switch (type) {
-            case 0:
-                // The 'vorbis window' (window 0) is sin(sin(x)*sin(x)*2pi)
-            {
-                int leftbegin = window / 4 - left / 2;
-                int rightbegin = window - window / 4 - right / 2;
+        if (type == 0) {// The 'vorbis window' (window 0) is sin(sin(x)*sin(x)*2pi)
+            int leftbegin = window / 4 - left / 2;
+            int rightbegin = window - window / 4 - right / 2;
 
-                for (int i = 0; i < left; i++) {
-                    float x = (float) ((i + .5) / left * M_PI / 2.);
-                    x = (float) Math.sin(x);
-                    x *= x;
-                    x *= M_PI / 2.;
-                    x = (float) Math.sin(x);
-                    ret[i + leftbegin] = x;
-                }
-
-                for (int i = leftbegin + left; i < rightbegin; i++) {
-                    ret[i] = 1.f;
-                }
-
-                for (int i = 0; i < right; i++) {
-                    float x = (float) ((right - i - .5) / right * M_PI / 2.);
-                    x = (float) Math.sin(x);
-                    x *= x;
-                    x *= M_PI / 2.;
-                    x = (float) Math.sin(x);
-                    ret[i + rightbegin] = x;
-                }
+            for (int i = 0; i < left; i++) {
+                float x = (float) ((i + .5) / left * M_PI / 2.);
+                x = (float) Math.sin(x);
+                x *= x;
+                x *= M_PI / 2.;
+                x = (float) Math.sin(x);
+                ret[i + leftbegin] = x;
             }
-            break;
-            default:
-                //free(ret);
-                return (null);
+
+            for (int i = leftbegin + left; i < rightbegin; i++) {
+                ret[i] = 1.f;
+            }
+
+            for (int i = 0; i < right; i++) {
+                float x = (float) ((right - i - .5) / right * M_PI / 2.);
+                x = (float) Math.sin(x);
+                x *= x;
+                x *= M_PI / 2.;
+                x = (float) Math.sin(x);
+                ret[i + rightbegin] = x;
+            }
+        } else {//free(ret);
+            return (null);
         }
         return (ret);
     }
@@ -136,7 +130,7 @@ public class DspState {
     // here and not in analysis.c (which is for analysis transforms only).
     // The init is here because some of it is shared
 
-    int init(Info vi, boolean encp) {
+    void init(Info vi) {
         this.vi = vi;
         modebits = Util.ilog2(vi.modes);
 
@@ -209,22 +203,20 @@ public class DspState {
             mode[i] = FuncMapping.mapping_P[maptype].look(this, vi.mode_param[i],
                     vi.map_param[mapnum]);
         }
-        return (0);
     }
 
-    public int synthesis_init(Info vi) {
-        init(vi, false);
+    public void synthesis_init(Info vi) {
+        init(vi);
         // Adjust centerW to allow an easier mechanism for determining output
         pcm_returned = centerW;
         centerW -= vi.blocksizes[W] / 4 + vi.blocksizes[lW] / 4;
         granulepos = -1;
         sequence = -1;
-        return (0);
     }
 
     DspState(Info vi) {
         this();
-        init(vi, false);
+        init(vi);
         // Adjust centerW to allow an easier mechanism for determining output
         pcm_returned = centerW;
         centerW -= vi.blocksizes[W] / 4 + vi.blocksizes[lW] / 4;
@@ -236,7 +228,7 @@ public class DspState {
     // block.  The time domain envelope is not yet handled at the point of
     // calling (as it relies on the previous block).
 
-    public int synthesis_blockin(Block vb) {
+    public void synthesis_blockin(Block vb) {
         // Shift out any PCM/multipliers that we returned previously
         // centerW is currently the center of the last block added
         if (centerW > vi.blocksizes[1] / 2 && pcm_returned > 8192) {
@@ -244,7 +236,7 @@ public class DspState {
             // 1/2 long block
 
             int shiftPCM = centerW - vi.blocksizes[1] / 2;
-            shiftPCM = (pcm_returned < shiftPCM ? pcm_returned : shiftPCM);
+            shiftPCM = (Math.min(pcm_returned, shiftPCM));
 
             pcm_current -= shiftPCM;
             centerW -= shiftPCM;
@@ -302,15 +294,14 @@ public class DspState {
             }
 
             for (int j = 0; j < vi.channels; j++) {
-                int _pcm = beginW;
                 // the overlap/add section
-                int i = 0;
+                int i;
                 for (i = beginSl; i < endSl; i++) {
-                    pcm[j][_pcm + i] += vb.pcm[j][i];
+                    pcm[j][beginW + i] += vb.pcm[j][i];
                 }
                 // the remaining section
                 for (; i < sizeW; i++) {
-                    pcm[j][_pcm + i] = vb.pcm[j][i];
+                    pcm[j][beginW + i] = vb.pcm[j][i];
                 }
             }
 
@@ -346,7 +337,6 @@ public class DspState {
             if (vb.eofflag != 0)
                 eofflag = 1;
         }
-        return (0);
     }
 
     // pcm==NULL indicates we just want the pending samples, no more
@@ -363,11 +353,10 @@ public class DspState {
         return (0);
     }
 
-    public int synthesis_read(int bytes) {
+    public void synthesis_read(int bytes) {
         if (bytes != 0 && pcm_returned + bytes > centerW)
-            return (-1);
+            return;
         pcm_returned += bytes;
-        return (0);
     }
 
     public void clear() {

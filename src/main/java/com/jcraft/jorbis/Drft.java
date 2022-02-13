@@ -51,12 +51,12 @@ class Drft {
             splitcache = null;
     }
 
-    static int[] ntryh = {4, 2, 3, 5};
-    static float tpi = 6.28318530717958647692528676655900577f;
-    static float hsqt2 = .70710678118654752440084436210485f;
-    static float taui = .86602540378443864676372317075293618f;
-    static float taur = -.5f;
-    static float sqrt2 = 1.4142135623730950488016887242097f;
+    static final int[] ntryh = {4, 2, 3, 5};
+    static final float tpi = 6.28318530717958647692528676655900577f;
+    static final float hsqt2 = .70710678118654752440084436210485f;
+    static final float taui = .86602540378443864676372317075293618f;
+    static final float taur = -.5f;
+    static final float sqrt2 = 1.4142135623730950488016887242097f;
 
     static void drfti1(int n, float[] wa, int index, int[] ifac) {
         float arg, argh, argld, fi;
@@ -313,7 +313,7 @@ class Drft {
         int t0, t1, t2 = 0, t3, t4, t5, t6, t7, t8, t9, t10;
         float dc2, ai1, ai2, ar1, ar2, ds2;
         int nbd;
-        float dcp = 0, arg, dsp = 0, ar1h, ar2h;
+        float dcp, arg, dsp, ar1h, ar2h;
         int idp2, ipp2;
 
         arg = tpi / (float) ip;
@@ -835,7 +835,7 @@ class Drft {
             ch[t5] = tr2 + tr3;
             ch[t5 += t0] = tr1 - tr4;
             ch[t5 += t0] = tr2 - tr3;
-            ch[t5 += t0] = tr1 + tr4;
+            ch[t5 + t0] = tr1 + tr4;
             t1 += ido;
             t3 += t2;
         }
@@ -896,7 +896,7 @@ class Drft {
             ch[t5] = tr2 + tr2;
             ch[t5 += t0] = sqrt2 * (tr1 - ti1);
             ch[t5 += t0] = ti2 + ti2;
-            ch[t5 += t0] = -sqrt2 * (tr1 + ti1);
+            ch[t5 + t0] = -sqrt2 * (tr1 + ti1);
 
             t3 += ido;
             t1 += t2;

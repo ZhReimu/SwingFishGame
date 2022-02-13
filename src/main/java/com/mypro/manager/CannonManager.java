@@ -179,7 +179,7 @@ public class CannonManager extends IManager {
         //大炮的图全名(net_11.png)
         StringBuilder cannonFullName = new StringBuilder();
         //定义名字编号,子名称编号
-        int cannonNum = 1, subCannonNum = 1;
+        int cannonNum = 1, subCannonNum;
         String cannonName = "net";
         ArrayList<Bitmap> allCannonList = new ArrayList<>();
         //获取当前子弹的所有动作
@@ -290,7 +290,7 @@ public class CannonManager extends IManager {
         StringBuilder ammoFullName = new StringBuilder();
         StringBuilder subAmmoFullName = new StringBuilder();
         //定义名字编号,子名称编号
-        int ammoNum = 1, subAmmoNum = 1;
+        int ammoNum = 1, subAmmoNum;
         String ammoName = "bullet";
         ArrayList<Bitmap> allAmmoList = new ArrayList<>();
         //获取当前子弹的所有动作
@@ -486,7 +486,7 @@ public class CannonManager extends IManager {
     private void rotateCannon(float targetX, float targetY, Cannon cannon) {
         try {
             //获取大炮需要旋转的角度
-            float gun_angle = Tool.getAngle(targetX, targetY, GamingInfo.getGamingInfo().getScreenWidth() / 2, GamingInfo.getGamingInfo().getScreenHeight());
+            float gun_angle = Tool.getAngle(targetX, targetY, GamingInfo.getGamingInfo().getScreenWidth() / 2F, GamingInfo.getGamingInfo().getScreenHeight());
             cannon.getPicMatrix().reset();
             cannon.getPicMatrix().setTranslate(cannon.getX(), cannon.getY());
             //大炮旋转的算法
@@ -504,7 +504,7 @@ public class CannonManager extends IManager {
      * 恢复大炮的初始状态
      */
     private void resetCannonMatrix(Cannon cannon) {
-        rotateCannon(GamingInfo.getGamingInfo().getScreenWidth() / 2, 0, cannon);
+        rotateCannon(GamingInfo.getGamingInfo().getScreenWidth() / 2F, 0, cannon);
     }
 
     /**

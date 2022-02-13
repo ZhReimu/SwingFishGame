@@ -44,7 +44,7 @@ public class Node { //implements XmlIO{
     public static final int COMMENT = 9;
     public static final int DOCDECL = 10;
 
-    protected Vector children;
+    protected Vector<Object> children;
     protected StringBuffer types;
 
     /**
@@ -58,7 +58,7 @@ public class Node { //implements XmlIO{
             throw new NullPointerException();
 
         if (children == null) {
-            children = new Vector();
+            children = new Vector<>();
             types = new StringBuffer();
         }
 

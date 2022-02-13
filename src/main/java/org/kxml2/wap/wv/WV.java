@@ -2,8 +2,6 @@ package org.kxml2.wap.wv;
 
 import org.kxml2.wap.WbxmlParser;
 
-import java.io.IOException;
-
 /*
 
  * WV.java
@@ -26,7 +24,7 @@ import java.io.IOException;
 public abstract class WV {
 
 
-    public static WbxmlParser createParser() throws IOException {
+    public static WbxmlParser createParser() {
 
         WbxmlParser parser = new WbxmlParser();
 

@@ -28,6 +28,8 @@ package com.jcraft.jorbis;
 
 import com.jcraft.jogg.Buffer;
 
+import java.util.Arrays;
+
 class Floor0 extends FuncFloor {
 
     void pack(Object i, Buffer opb) {
@@ -151,7 +153,7 @@ class Floor0 extends FuncFloor {
                         out[j] = 0.0f;
 
                     for (int j = 0; j < look.m; j += b.dim) {
-                        if (b.decodevs(lsp, j, vb.opb, 1, -1) == -1) {
+                        if (b.decodevs(lsp, j, vb.opb) == -1) {
                             for (int k = 0; k < look.n; k++)
                                 out[k] = 0.0f;
                             return (0);
@@ -194,8 +196,7 @@ class Floor0 extends FuncFloor {
                 if (lsp == null || lsp.length < look.m + 1) {
                     lsp = new float[look.m + 1];
                 } else {
-                    for (int j = 0; j < lsp.length; j++)
-                        lsp[j] = 0.f;
+                    Arrays.fill(lsp, 0.f);
                 }
 
                 for (int j = 0; j < look.m; j += b.dim) {
@@ -216,7 +217,7 @@ class Floor0 extends FuncFloor {
         return (null);
     }
 
-    int inverse2(Block vb, Object i, Object memo, float[] out) {
+    void inverse2(Block vb, Object i, Object memo, float[] out) {
         LookFloor0 look = (LookFloor0) i;
         InfoFloor0 info = look.vi;
 
@@ -226,12 +227,11 @@ class Floor0 extends FuncFloor {
 
             Lsp.lsp_to_curve(out, look.linearmap, look.n, look.ln, lsp, look.m, amp,
                     info.ampdB);
-            return (1);
+            return;
         }
         for (int j = 0; j < look.n; j++) {
             out[j] = 0.f;
         }
-        return (0);
     }
 
     static float fromdB(float x) {
@@ -302,7 +302,7 @@ class Floor0 extends FuncFloor {
             curve[i] = lcurve[l.linearmap[i]];
     }
 
-    class InfoFloor0 {
+    static class InfoFloor0 {
         int order;
         int rate;
         int barkmap;
@@ -311,20 +311,20 @@ class Floor0 extends FuncFloor {
         int ampdB;
 
         int numbooks; // <= 16
-        int[] books = new int[16];
+        final int[] books = new int[16];
     }
 
-    class LookFloor0 {
+    static class LookFloor0 {
         int n;
         int ln;
         int m;
         int[] linearmap;
 
         InfoFloor0 vi;
-        Lpc lpclook = new Lpc();
+        final Lpc lpclook = new Lpc();
     }
 
-    class EchstateFloor0 {
+    static class EchstateFloor0 {
         int[] codewords;
         float[] curve;
         long frameno;

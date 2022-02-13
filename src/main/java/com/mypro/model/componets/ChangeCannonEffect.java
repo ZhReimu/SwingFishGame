@@ -23,7 +23,7 @@ public class ChangeCannonEffect extends DrawableAdapter {
      * 播放效果
      */
     public void playEffect() {
-        this.getPicMatrix().setTranslate(GamingInfo.getGamingInfo().getCannonLayoutX() - this.getPicWidth() / 2, GamingInfo.getGamingInfo().getCannonLayoutY() - this.getPicHeight() / 2);
+        this.getPicMatrix().setTranslate(GamingInfo.getGamingInfo().getCannonLayoutX() - this.getPicWidth() / 2F, GamingInfo.getGamingInfo().getCannonLayoutY() - this.getPicHeight() / 2F);
         GamingInfo.getGamingInfo().getSurface().putDrawablePic(Constant.CHANGE_CANNON_EFFECT_LAYER, this);
         for (int i = 0; i < effect.length; i++) {
             currentId = i;

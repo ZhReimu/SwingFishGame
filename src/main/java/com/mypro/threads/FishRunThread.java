@@ -197,7 +197,7 @@ public class FishRunThread extends Thread {
      */
     private void setFishOutlintPoint(int rotateAngle) {
         fish.clearFishOutlinePoint();// 清空上一次的范围值
-        int flagX = 0, flagY = 0;
+        int flagX, flagY;
         // 计算左上角坐标
         fish.getFishOutlinePoint()[0] = (int) getRotateX(0, 0,
                 fish.getFish().getFishRotatePoint_X(), fish.getFish().getFishRotatePoint_Y(), rotateAngle)

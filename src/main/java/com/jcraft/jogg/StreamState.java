@@ -26,6 +26,8 @@
 
 package com.jcraft.jogg;
 
+import java.util.Arrays;
+
 public class StreamState {
     byte[] body_data; /* bytes from packet bodies */
     int body_storage; /* storage elements allocated */
@@ -41,7 +43,7 @@ public class StreamState {
     int lacing_packet;
     int lacing_returned;
 
-    byte[] header = new byte[282]; /* working space for header encode */
+    final byte[] header = new byte[282]; /* working space for header encode */
     int header_fill;
 
     public int e_o_s; /* set when we have buffered the last packet in the
@@ -78,12 +80,9 @@ public class StreamState {
         if (body_data == null) {
             init();
         } else {
-            for (int i = 0; i < body_data.length; i++)
-                body_data[i] = 0;
-            for (int i = 0; i < lacing_vals.length; i++)
-                lacing_vals[i] = 0;
-            for (int i = 0; i < granule_vals.length; i++)
-                granule_vals[i] = 0;
+            Arrays.fill(body_data, (byte) 0);
+            Arrays.fill(lacing_vals, 0);
+            Arrays.fill(granule_vals, 0);
         }
         this.serialno = serialno;
     }
@@ -371,8 +370,8 @@ public class StreamState {
     public int flush(Page og) {
 
         int i;
-        int vals = 0;
-        int maxvals = (lacing_fill > 255 ? 255 : lacing_fill);
+        int vals;
+        int maxvals = (Math.min(lacing_fill, 255));
         int bytes = 0;
         int acc = 0;
         long granule_pos = granule_vals[0];
@@ -504,7 +503,7 @@ public class StreamState {
         return e_o_s;
     }
 
-    public int reset() {
+    public void reset() {
         body_fill = 0;
         body_returned = 0;
 
@@ -519,6 +518,5 @@ public class StreamState {
         pageno = -1;
         packetno = 0;
         granulepos = 0;
-        return (0);
     }
 }

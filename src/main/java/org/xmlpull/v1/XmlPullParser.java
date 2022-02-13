@@ -536,7 +536,7 @@ public interface XmlPullParser {
      * @see #FEATURE_VALIDATION
      */
     void defineEntityReplacementText(String entityName,
-                                     String replacementText) throws XmlPullParserException;
+                                     String replacementText);
 
     /**
      * Returns the numbers of elements in the namespace stack for the given
@@ -562,7 +562,7 @@ public interface XmlPullParser {
      * @see #getNamespace()
      * @see #getNamespace(String)
      */
-    int getNamespaceCount(int depth) throws XmlPullParserException;
+    int getNamespaceCount(int depth);
 
     /**
      * Returns the namespace prefixe for the given position
@@ -574,7 +574,7 @@ public interface XmlPullParser {
      * in the corresponding START_TAG are still accessible
      * although they are no longer in scope.
      */
-    String getNamespacePrefix(int pos) throws XmlPullParserException;
+    String getNamespacePrefix(int pos);
 
     /**
      * Returns the namespace URI for the given position in the
@@ -583,7 +583,7 @@ public interface XmlPullParser {
      * <p><b>NOTE:</b> when parser is on END_TAG then namespace prefixes that were declared
      * in corresponding START_TAG are still accessible even though they are not in scope
      */
-    String getNamespaceUri(int pos) throws XmlPullParserException;
+    String getNamespaceUri(int pos);
 
     /**
      * Returns the URI corresponding to the given prefix,
@@ -906,7 +906,7 @@ public interface XmlPullParser {
      * @see #nextToken()
      */
     int getEventType()
-            throws XmlPullParserException;
+    ;
 
     /**
      * Get next parsing event - element content wil be coalesced and only one
@@ -1019,7 +1019,7 @@ public interface XmlPullParser {
      * @see #ENTITY_REF
      * @see #IGNORABLE_WHITESPACE
      */
-    int nextToken()
+    void nextToken()
             throws XmlPullParserException, IOException;
 
     //-----------------------------------------------------------------------------
@@ -1042,7 +1042,7 @@ public interface XmlPullParser {
      * </pre>
      */
     void require(int type, String namespace, String name)
-            throws XmlPullParserException, IOException;
+            throws XmlPullParserException;
 
     /**
      * If current event is START_TAG then if next element is TEXT then element content is returned

@@ -87,7 +87,6 @@ public class FishManager extends IManager {
             XmlManager.gotoTagByTagName(xml, "string");
             fishInfoConfig = XmlManager.getValueByCurrentTag(xml);
             //清空Xml对象，释放空间
-            xml = null;
             //初始化鱼的动作信息
             this.initFishAct(configs, fishActConfigs);
             //初始化鱼的基本信息
@@ -104,8 +103,6 @@ public class FishManager extends IManager {
                     fishName.append("fish").append(fishIndex);
                 }
             }
-            configs = null;
-            fishName = null;
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,7 +176,7 @@ public class FishManager extends IManager {
         while (GamingInfo.getGamingInfo().isGaming()) {
             fishFullName.delete(0, fishFullName.length());
             //一帧图片的引用
-            ActConfig fishAct = null;
+            ActConfig fishAct;
             if (fishNum < 10) {
                 fishFullName.append(fishName).append("_0").append(fishNum).append(".png");
             } else {
@@ -192,14 +189,13 @@ public class FishManager extends IManager {
                 break;
             }
         }
-        fishFullName = null;
         System.gc();
         fishNum = 1;
         //获取当前鱼的所有被捕获动作
         while (GamingInfo.getGamingInfo().isGaming()) {
             fishCatchFullName.delete(0, fishCatchFullName.length());
             //一帧图片的引用
-            ActConfig fishCatchAct = null;
+            ActConfig fishCatchAct;
             if (fishNum < 10) {
                 fishCatchFullName.append(fishName).append("_catch_0").append(fishNum).append(".png");
             } else {
@@ -212,7 +208,6 @@ public class FishManager extends IManager {
                 break;
             }
         }
-        fishCatchFullName = null;
         System.gc();
         //如果没有解析出鱼的动作
         if (allActs.size() == 0) {
@@ -228,8 +223,6 @@ public class FishManager extends IManager {
             for (int i = 0; i < allCatchActs.size(); i++) {
                 fishCatchActsArray[i] = allCatchActs.get(i);
             }
-            allActs = null;
-            allCatchActs = null;
             allFishActConfigs.put(fishName, fishActArray);
             allFishCatchActConfigs.put(fishName, fishCatchActsArray);
             allFish.add(fishName);

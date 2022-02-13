@@ -28,7 +28,7 @@ package com.jcraft.jorbis;
 
 class ChainingExample {
     public static void main(String[] arg) {
-        VorbisFile ov = null;
+        VorbisFile ov;
 
         try {
             if (arg.length > 0) {
@@ -37,7 +37,7 @@ class ChainingExample {
                 ov = new VorbisFile(System.in, null, -1);
             }
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
             return;
         }
 

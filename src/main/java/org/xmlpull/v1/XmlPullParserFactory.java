@@ -68,7 +68,7 @@ public class XmlPullParserFactory {
 
 
     // features are kept there
-    protected Hashtable<String, Boolean> features = new Hashtable<>();
+    protected final Hashtable<String, Boolean> features = new Hashtable<>();
 
 
     /**
@@ -87,7 +87,7 @@ public class XmlPullParserFactory {
      * @param state if true feature will be set; if false will be ignored
      */
 
-    public void setFeature(String name, boolean state) throws XmlPullParserException {
+    public void setFeature(String name, boolean state) {
 
         features.put(name, state);
     }
@@ -238,7 +238,7 @@ public class XmlPullParserFactory {
                 //                        ser.setFeature(key, true);
                 //                    }
                 //                }
-                return (XmlSerializer) ppClass.newInstance();
+                return (XmlSerializer) ppClass.getConstructor().newInstance();
 
             } catch (Exception ex) {
                 issues.append(ppClass.getName()).append(": ").append(ex).append("; ");

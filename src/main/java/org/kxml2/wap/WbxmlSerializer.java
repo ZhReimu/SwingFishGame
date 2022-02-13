@@ -38,7 +38,7 @@ import java.util.Vector;
 public class WbxmlSerializer implements XmlSerializer {
 
 
-    Hashtable stringTable = new Hashtable();
+    final Hashtable<String, Integer> stringTable = new Hashtable<>();
 
     OutputStream out;
 
@@ -49,11 +49,11 @@ public class WbxmlSerializer implements XmlSerializer {
     int depth;
     String name;
     String namespace;
-    Vector attributes = new Vector();
+    final Vector<Object> attributes = new Vector<>();
 
-    Hashtable attrStartTable = new Hashtable();
-    Hashtable attrValueTable = new Hashtable();
-    Hashtable tagTable = new Hashtable();
+    final Hashtable<String, int[]> attrStartTable = new Hashtable<>();
+    final Hashtable<String, int[]> attrValueTable = new Hashtable<>();
+    final Hashtable<String, int[]> tagTable = new Hashtable<>();
 
     private int attrPage;
     private int tagPage;
@@ -61,10 +61,9 @@ public class WbxmlSerializer implements XmlSerializer {
     private String encoding;
 
 
-    public XmlSerializer attribute(String namespace, String name, String value) {
+    public void attribute(String namespace, String name, String value) {
         attributes.addElement(name);
         attributes.addElement(value);
-        return this;
     }
 
 
@@ -151,7 +150,7 @@ public class WbxmlSerializer implements XmlSerializer {
 
         int len = attributes.size();
 
-        int[] idx = (int[]) tagTable.get(pending);
+        int[] idx = tagTable.get(pending);
 
         // if no entry in known table, then add as literal
         if (idx == null) {
@@ -178,7 +177,7 @@ public class WbxmlSerializer implements XmlSerializer {
         }
 
         for (int i = 0; i < len; ) {
-            idx = (int[]) attrStartTable.get(attributes.elementAt(i));
+            idx = attrStartTable.get(attributes.elementAt(i));
 
             if (idx == null) {
                 buf.write(Wbxml.LITERAL);
@@ -191,7 +190,7 @@ public class WbxmlSerializer implements XmlSerializer {
                 }
                 buf.write(idx[1]);
             }
-            idx = (int[]) attrValueTable.get(attributes.elementAt(++i));
+            idx = attrValueTable.get(attributes.elementAt(++i));
             if (idx == null) {
                 writeStr((String) attributes.elementAt(i));
             } else {
@@ -227,7 +226,7 @@ public class WbxmlSerializer implements XmlSerializer {
         throw new RuntimeException("Wbxml requires an OutputStream!");
     }
 
-    public void setOutput(OutputStream out, String encoding) throws IOException {
+    public void setOutput(OutputStream out, String encoding) {
 
         this.encoding = encoding == null ? "UTF-8" : encoding;
         this.out = out;
@@ -259,9 +258,9 @@ public class WbxmlSerializer implements XmlSerializer {
             encoding = s;
         }
 
-        if (encoding.toUpperCase().equals("UTF-8")) {
+        if (encoding.equalsIgnoreCase("UTF-8")) {
             out.write(106);
-        } else if (encoding.toUpperCase().equals("ISO-8859-1")) {
+        } else if (encoding.equalsIgnoreCase("ISO-8859-1")) {
             out.write(0x04);
         } else {
             throw new UnsupportedEncodingException(s);
@@ -269,7 +268,7 @@ public class WbxmlSerializer implements XmlSerializer {
     }
 
 
-    public XmlSerializer startTag(String namespace, String name) throws IOException {
+    public void startTag(String namespace, String name) throws IOException {
 
         if (namespace != null && !"".equals(namespace))
             throw new RuntimeException("NSP NYI");
@@ -280,7 +279,6 @@ public class WbxmlSerializer implements XmlSerializer {
         pending = name;
         depth++;
 
-        return this;
     }
 
     public XmlSerializer text(char[] chars, int start, int len) throws IOException {
@@ -292,13 +290,12 @@ public class WbxmlSerializer implements XmlSerializer {
         return this;
     }
 
-    public XmlSerializer text(String text) throws IOException {
+    public void text(String text) throws IOException {
 
         checkPending(false);
 
         writeStr(text);
 
-        return this;
     }
 
 
@@ -352,7 +349,7 @@ public class WbxmlSerializer implements XmlSerializer {
     }
 
 
-    public XmlSerializer endTag(String namespace, String name) throws IOException {
+    public void endTag(String namespace, String name) throws IOException {
 
         //        current = current.prev;
 
@@ -363,7 +360,6 @@ public class WbxmlSerializer implements XmlSerializer {
 
         depth--;
 
-        return this;
     }
 
     /**
@@ -426,12 +422,12 @@ public class WbxmlSerializer implements XmlSerializer {
         out.write(0);
     }
 
-    private final void writeStrT(String s, boolean mayPrependSpace) throws IOException {
+    private void writeStrT(String s, boolean mayPrependSpace) throws IOException {
 
-        Integer idx = (Integer) stringTable.get(s);
+        Integer idx = stringTable.get(s);
 
         if (idx != null) {
-            writeInt(buf, idx.intValue());
+            writeInt(buf, idx);
         } else {
             int i = stringTableBuf.size();
             if (s.charAt(0) >= '0' && mayPrependSpace) {
@@ -441,14 +437,14 @@ public class WbxmlSerializer implements XmlSerializer {
                 writeInt(buf, i);
             }
 
-            stringTable.put(s, new Integer(i));
+            stringTable.put(s, i);
             if (s.charAt(0) == ' ') {
-                stringTable.put(s.substring(1), new Integer(i + 1));
+                stringTable.put(s.substring(1), i + 1);
             }
             int j = s.lastIndexOf(' ');
             if (j > 1) {
-                stringTable.put(s.substring(j), new Integer(i + j));
-                stringTable.put(s.substring(j + 1), new Integer(i + j + 1));
+                stringTable.put(s.substring(j), i + j);
+                stringTable.put(s.substring(j + 1), i + j + 1);
             }
 
             writeStrI(stringTableBuf, s);
@@ -467,7 +463,7 @@ public class WbxmlSerializer implements XmlSerializer {
 
         for (int i = 0; i < tagTable.length; i++) {
             if (tagTable[i] != null) {
-                Object idx = new int[]{page, i + 5};
+                int[] idx = new int[]{page, i + 5};
                 this.tagTable.put(tagTable[i], idx);
             }
         }
@@ -485,7 +481,7 @@ public class WbxmlSerializer implements XmlSerializer {
 
         for (int i = 0; i < attrStartTable.length; i++) {
             if (attrStartTable[i] != null) {
-                Object idx = new int[]{page, i + 5};
+                int[] idx = new int[]{page, i + 5};
                 this.attrStartTable.put(attrStartTable[i], idx);
             }
         }
@@ -500,7 +496,7 @@ public class WbxmlSerializer implements XmlSerializer {
         // clear entries in this.table!
         for (int i = 0; i < attrValueTable.length; i++) {
             if (attrValueTable[i] != null) {
-                Object idx = new int[]{page, i + 0x085};
+                int[] idx = new int[]{page, i + 0x085};
                 this.attrValueTable.put(attrValueTable[i], idx);
             }
         }
