@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/base/graphics/Bitmap.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/base/graphics/Canvas.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/base/graphics/Matrix.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/base/graphics/Paint.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/base/tools/Log.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/basecomponet/AwtMainComponent.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/basecomponet/JMatrix.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/constant/Constant.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/mainsurface/MainSurface.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/CannonManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/CatchFishManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/FishManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/GameInitManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/GamePartManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/ImageManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/LayoutManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/MusicManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/NpcManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/ParticleEffectManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/PathManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/ScoreManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/ShoalManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/manager/XmlManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/model/GamePartInfo.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/model/HeadFish.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/model/ImageConfig.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/model/LayoutInfo.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/mypro/tools/MediaTool.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
