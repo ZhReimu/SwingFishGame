@@ -124,6 +124,7 @@ public class MediaTool {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println(fileName);
                 }
             } while (isLoop);
         });
